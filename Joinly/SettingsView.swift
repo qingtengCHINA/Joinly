@@ -96,17 +96,30 @@ struct SettingsView: View {
     }
 
     private func settingsLinkRow(title: String, url: String) -> some View {
-        Link(destination: URL(string: url)!) {
-            HStack {
-                Text(title)
-                    .foregroundStyle(.primary)
-                Spacer()
-                Image(systemName: "arrow.up.right.square")
-                    .foregroundStyle(.secondary)
+        Group {
+            if let destination = URL(string: url) {
+                Link(destination: destination) {
+                    HStack {
+                        Text(title)
+                            .foregroundStyle(.primary)
+                        Spacer()
+                        Image(systemName: "arrow.up.right.square")
+                            .foregroundStyle(.secondary)
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+            } else {
+                HStack {
+                    Text(title)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text(language == "en" ? "Invalid URL" : "无效链接")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                }
             }
-            .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
     }
 
     private func chooseDefaultOutputFolder() {

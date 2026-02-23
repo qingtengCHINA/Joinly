@@ -6,17 +6,22 @@ enum MergeJobStatus: String, Hashable {
     case completed
     case failed
 
-    var title: String {
+    func title(for language: String) -> String {
+        let isEnglish = language == "en"
         switch self {
         case .pending:
-            return "待处理"
+            return isEnglish ? "Pending" : "待处理"
         case .running:
-            return "合并中"
+            return isEnglish ? "Running" : "合并中"
         case .completed:
-            return "已完成"
+            return isEnglish ? "Completed" : "已完成"
         case .failed:
-            return "失败"
+            return isEnglish ? "Failed" : "失败"
         }
+    }
+
+    var title: String {
+        title(for: "zh")
     }
 }
 

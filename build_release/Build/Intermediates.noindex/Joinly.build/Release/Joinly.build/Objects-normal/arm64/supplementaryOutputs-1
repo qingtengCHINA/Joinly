@@ -1,0 +1,12 @@
+{
+  "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/Joinly/AboutView.swift" : {
+    "abi-baseline-json" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly.abi.json",
+    "const-values" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly-primary.swiftconstvalues",
+    "dependencies" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly-primary.d",
+    "diagnostics" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly-primary.dia",
+    "objc-header" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly-Swift.h",
+    "swiftdoc" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly.swiftdoc",
+    "swiftmodule" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly.swiftmodule",
+    "swiftsourceinfo" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly.swiftsourceinfo"
+  }
+}

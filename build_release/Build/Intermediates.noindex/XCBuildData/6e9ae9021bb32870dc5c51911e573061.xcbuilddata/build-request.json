@@ -1,0 +1,66 @@
+{
+  "buildCommand" : {
+    "command" : "build",
+    "skipDependencies" : false,
+    "style" : "buildOnly"
+  },
+  "configuredTargets" : [
+    {
+      "guid" : "1a11631461ab6145d1e6165593f53eb4945646573d4c5ca9633f35a627be4629"
+    }
+  ],
+  "containerPath" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/Joinly.xcodeproj",
+  "continueBuildingAfterErrors" : false,
+  "dependencyScope" : "workspace",
+  "enableIndexBuildArena" : false,
+  "hideShellScriptEnvironment" : false,
+  "parameters" : {
+    "action" : "build",
+    "activeArchitecture" : "arm64",
+    "activeRunDestination" : {
+      "disableOnlyActiveArch" : false,
+      "platform" : "macosx",
+      "sdk" : "macosx26.2",
+      "sdkVariant" : "macos",
+      "supportedArchitectures" : [
+        "arm64e",
+        "arm64",
+        "x86_64"
+      ],
+      "targetArchitecture" : "arm64"
+    },
+    "arenaInfo" : {
+      "buildIntermediatesPath" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex",
+      "buildProductsPath" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Products",
+      "derivedDataPath" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release",
+      "indexDataStoreFolderPath" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Index.noindex/DataStore",
+      "indexEnableDataStore" : true,
+      "indexPCHPath" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Index.noindex/PrecompiledHeaders",
+      "pchPath" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/PrecompiledHeaders"
+    },
+    "configurationName" : "Release",
+    "overrides" : {
+      "commandLine" : {
+        "table" : {
+          "CODE_SIGNING_ALLOWED" : "NO",
+          "SDKROOT" : "macosx26.2"
+        }
+      },
+      "synthesized" : {
+        "table" : {
+          "ACTION" : "build",
+          "ENABLE_PREVIEWS" : "NO",
+          "ENABLE_XOJIT_PREVIEWS" : "YES",
+          "ONLY_ACTIVE_ARCH" : "YES",
+          "TOOLCHAINS" : "com.apple.dt.toolchain.Metal.32023 $(inherited)"
+        }
+      }
+    }
+  },
+  "schemeCommand" : "launch",
+  "showNonLoggedProgress" : true,
+  "useDryRun" : false,
+  "useImplicitDependencies" : true,
+  "useLegacyBuildLocations" : false,
+  "useParallelTargets" : true
+}

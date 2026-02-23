@@ -1,0 +1,61 @@
+{
+  "" : {
+    "const-values" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly-primary.swiftconstvalues",
+    "dependencies" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly-primary.d",
+    "diagnostics" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly-primary.dia",
+    "emit-module-dependencies" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly-primary-emit-module.dia",
+    "pch" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/Joinly-primary.swiftdeps"
+  },
+  "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/Joinly/AboutView.swift" : {
+    "index-unit-output-path" : "/Joinly.build/Release/Joinly.build/Objects-normal/arm64/AboutView.o",
+    "llvm-bc" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/AboutView.bc",
+    "object" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/AboutView.o"
+  },
+  "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/Joinly/AppMetadata.swift" : {
+    "index-unit-output-path" : "/Joinly.build/Release/Joinly.build/Objects-normal/arm64/AppMetadata.o",
+    "llvm-bc" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/AppMetadata.bc",
+    "object" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/AppMetadata.o"
+  },
+  "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/Joinly/ContentView.swift" : {
+    "index-unit-output-path" : "/Joinly.build/Release/Joinly.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/ContentView.bc",
+    "object" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/ContentView.o"
+  },
+  "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/Joinly/JoinlyApp.swift" : {
+    "index-unit-output-path" : "/Joinly.build/Release/Joinly.build/Objects-normal/arm64/JoinlyApp.o",
+    "llvm-bc" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/JoinlyApp.bc",
+    "object" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/JoinlyApp.o"
+  },
+  "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/Joinly/LiquidProgressBar.swift" : {
+    "index-unit-output-path" : "/Joinly.build/Release/Joinly.build/Objects-normal/arm64/LiquidProgressBar.o",
+    "llvm-bc" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/LiquidProgressBar.bc",
+    "object" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/LiquidProgressBar.o"
+  },
+  "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/Joinly/MergeJob.swift" : {
+    "index-unit-output-path" : "/Joinly.build/Release/Joinly.build/Objects-normal/arm64/MergeJob.o",
+    "llvm-bc" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/MergeJob.bc",
+    "object" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/MergeJob.o"
+  },
+  "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/Joinly/SettingsView.swift" : {
+    "index-unit-output-path" : "/Joinly.build/Release/Joinly.build/Objects-normal/arm64/SettingsView.o",
+    "llvm-bc" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/SettingsView.bc",
+    "object" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/SettingsView.o"
+  },
+  "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/Joinly/VideoFile.swift" : {
+    "index-unit-output-path" : "/Joinly.build/Release/Joinly.build/Objects-normal/arm64/VideoFile.o",
+    "llvm-bc" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/VideoFile.bc",
+    "object" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/VideoFile.o"
+  },
+  "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/Joinly/VideoMerger.swift" : {
+    "index-unit-output-path" : "/Joinly.build/Release/Joinly.build/Objects-normal/arm64/VideoMerger.o",
+    "llvm-bc" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/VideoMerger.bc",
+    "object" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/VideoMerger.o"
+  },
+  "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "index-unit-output-path" : "/Joinly.build/Release/Joinly.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/qingteng/Downloads/项目代码_Projects/我的制作/Joinly/build_release/Build/Intermediates.noindex/Joinly.build/Release/Joinly.build/Objects-normal/arm64/GeneratedAssetSymbols.o"
+  }
+}

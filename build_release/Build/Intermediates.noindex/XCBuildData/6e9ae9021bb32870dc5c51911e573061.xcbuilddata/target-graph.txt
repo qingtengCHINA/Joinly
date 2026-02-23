@@ -1,0 +1,2 @@
+Target dependency graph (1 target)
+Target 'Joinly' in project 'Joinly' (no dependencies)

@@ -90,7 +90,13 @@ struct ContentView: View {
         .onChange(of: sortAscending) { _ in
             applySortIfNeeded()
         }
-        .onDrop(of: [.fileURL], delegate: FileDropDelegate(onDrop: handleDroppedFiles))
+        .onDrop(
+            of: [.fileURL],
+            delegate: FileDropDelegate(
+                onDrop: handleDroppedFiles,
+                onDragStateChange: { isDraggingOver = $0 }
+            )
+        )
         .environment(\.locale, Locale(identifier: language))
     }
 
@@ -280,7 +286,7 @@ struct ContentView: View {
 
                             Spacer()
 
-                            Text(job.status.title)
+                            Text(job.status.title(for: language))
                                 .font(.custom("Menlo-Regular", size: 10))
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 3)
@@ -392,6 +398,11 @@ struct ContentView: View {
         }
     }
 
+    private struct VideoImportSummary {
+        let imported: [VideoFile]
+        let failedCount: Int
+    }
+
     private func pickVideos() {
         let panel = NSOpenPanel()
         panel.title = language == "en" ? "Select videos to add to the current file group" : "选择要加入当前文件组的视频"
@@ -400,41 +411,36 @@ struct ContentView: View {
         panel.allowedContentTypes = [.movie, .mpeg4Movie, .quickTimeMovie, .video]
 
         if panel.runModal() == .OK {
-            Task {
-                statusMessage = language == "en" ? "Reading video information..." : "读取视频信息中..."
-                let newItems = await withTaskGroup(of: Result<VideoFile, Error>.self) { group -> [VideoFile] in
-                    for url in panel.urls {
-                        group.addTask {
-                            do {
-                                let file = await VideoFile.make(from: url)
-                                return .success(file)
-                            } catch {
-                                return .failure(error)
-                            }
-                        }
-                    }
+            importVideos(from: panel.urls)
+        }
+    }
 
-                    var results: [Result<VideoFile, Error>] = []
-                    for await result in group {
-                        results.append(result)
-                    }
-                    
-                    let successfulFiles = results.compactMap { try? $0.get() }
-                    let failedCount = results.count - successfulFiles.count
-                    
-                    if failedCount > 0 {
-                        await MainActor.run {
-                            statusMessage = language == "en" ? 
-                                "Added \(successfulFiles.count) files, \(failedCount) files failed to read" : 
-                                "已添加 \(successfulFiles.count) 个文件，\(failedCount) 个文件读取失败"
-                        }
-                    }
-                    
-                    return successfulFiles
+    private func handleDroppedFiles(_ urls: [URL]) {
+        importVideos(from: urls)
+    }
+
+    private func importVideos(from urls: [URL]) {
+        Task {
+            let fileURLs = urls.filter(\.isFileURL)
+            guard !fileURLs.isEmpty else {
+                await MainActor.run {
+                    statusMessage = language == "en" ? "No readable file URLs found" : "未检测到可读取的文件路径"
+                    isDraggingOver = false
                 }
+                return
+            }
 
-                let existing = Set(files.map(\.url))
-                let uniqueNew = newItems.filter { !existing.contains($0.url) }
+            await MainActor.run {
+                statusMessage = language == "en" ? "Reading video information..." : "读取视频信息中..."
+            }
+
+            let summary = await loadVideoFiles(from: fileURLs)
+
+            await MainActor.run {
+                let existing = Set(files.map { $0.url.standardizedFileURL })
+                let uniqueNew = summary.imported.filter { !existing.contains($0.url.standardizedFileURL) }
+                let duplicateCount = summary.imported.count - uniqueNew.count
+
                 files.append(contentsOf: uniqueNew)
                 applySortIfNeeded()
 
@@ -442,62 +448,63 @@ struct ContentView: View {
                     draftGroupName = language == "en" ? "Group \(jobs.count + 1)" : "组 \(jobs.count + 1)"
                 }
 
-                if newItems.count == uniqueNew.count {
-                    statusMessage = language == "en" ? "Added \(uniqueNew.count) files" : "已添加 \(uniqueNew.count) 个文件"
-                }
+                statusMessage = importStatusMessage(
+                    added: uniqueNew.count,
+                    duplicates: duplicateCount,
+                    failed: summary.failedCount
+                )
+                isDraggingOver = false
             }
         }
     }
 
-    private func handleDroppedFiles(_ urls: [URL]) {
-        Task {
-            statusMessage = language == "en" ? "Reading video information..." : "读取视频信息中..."
-            let newItems = await withTaskGroup(of: Result<VideoFile, Error>.self) { group -> [VideoFile] in
-                for url in urls where url.isFileURL {
-                    group.addTask {
-                        do {
-                            let file = await VideoFile.make(from: url)
-                            return .success(file)
-                        } catch {
-                            return .failure(error)
-                        }
+    private func loadVideoFiles(from urls: [URL]) async -> VideoImportSummary {
+        await withTaskGroup(of: (Int, Result<VideoFile, Error>).self) { group in
+            for (index, url) in urls.enumerated() {
+                group.addTask {
+                    do {
+                        return (index, .success(try await VideoFile.make(from: url)))
+                    } catch {
+                        return (index, .failure(error))
                     }
                 }
+            }
 
-                var results: [Result<VideoFile, Error>] = []
-                for await result in group {
-                    results.append(result)
+            var results: [(Int, Result<VideoFile, Error>)] = []
+            for await result in group {
+                results.append(result)
+            }
+            results.sort { $0.0 < $1.0 }
+
+            var imported: [VideoFile] = []
+            var failedCount = 0
+            for (_, result) in results {
+                switch result {
+                case .success(let file):
+                    imported.append(file)
+                case .failure:
+                    failedCount += 1
                 }
-                
-                let successfulFiles = results.compactMap { try? $0.get() }
-                let failedCount = results.count - successfulFiles.count
-                
-                if failedCount > 0 {
-                    await MainActor.run {
-                        statusMessage = language == "en" ? 
-                            "Added \(successfulFiles.count) files, \(failedCount) files failed to read" : 
-                            "已添加 \(successfulFiles.count) 个文件，\(failedCount) 个文件读取失败"
-                    }
-                }
-                
-                return successfulFiles
             }
 
-            let existing = Set(files.map(\.url))
-            let uniqueNew = newItems.filter { !existing.contains($0.url) }
-            files.append(contentsOf: uniqueNew)
-            applySortIfNeeded()
-
-            if draftGroupName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                draftGroupName = language == "en" ? "Group \(jobs.count + 1)" : "组 \(jobs.count + 1)"
-            }
-
-            if newItems.count == uniqueNew.count {
-                statusMessage = language == "en" ? "Added \(uniqueNew.count) files" : "已添加 \(uniqueNew.count) 个文件"
-            }
-            
-            isDraggingOver = false
+            return VideoImportSummary(imported: imported, failedCount: failedCount)
         }
+    }
+
+    private func importStatusMessage(added: Int, duplicates: Int, failed: Int) -> String {
+        if language == "en" {
+            var parts: [String] = []
+            if added > 0 { parts.append("Added \(added) files") }
+            if duplicates > 0 { parts.append("\(duplicates) duplicates skipped") }
+            if failed > 0 { parts.append("\(failed) files failed to read") }
+            return parts.isEmpty ? "No new videos were added" : parts.joined(separator: ", ")
+        }
+
+        var parts: [String] = []
+        if added > 0 { parts.append("已添加 \(added) 个文件") }
+        if duplicates > 0 { parts.append("已跳过 \(duplicates) 个重复文件") }
+        if failed > 0 { parts.append("\(failed) 个文件读取失败") }
+        return parts.isEmpty ? "未添加任何新视频" : parts.joined(separator: "，")
     }
 
     private func moveUp() {
@@ -533,7 +540,8 @@ struct ContentView: View {
             return
         }
 
-        let job = MergeJob(title: groupName, files: files, outputURL: outputURL)
+        let initialDetail = language == "en" ? "Waiting to start" : "等待开始"
+        let job = MergeJob(title: groupName, files: files, outputURL: outputURL, detail: initialDetail)
         jobs.append(job)
 
         statusMessage = language == "en" ? "Added task: \(groupName)" : "已加入任务：\(groupName)"
@@ -705,24 +713,73 @@ struct ContentView: View {
     }
 }
 
+private final class URLDropCollector {
+    private var urls: [URL] = []
+    private let lock = NSLock()
+
+    func append(_ url: URL) {
+        lock.lock()
+        urls.append(url)
+        lock.unlock()
+    }
+
+    func snapshot() -> [URL] {
+        lock.lock()
+        defer { lock.unlock() }
+        return urls
+    }
+}
+
 struct FileDropDelegate: DropDelegate {
     let onDrop: ([URL]) -> Void
+    let onDragStateChange: (Bool) -> Void
     
     func performDrop(info: DropInfo) -> Bool {
-        let urls = info.itemProviders(for: [.fileURL]).compactMap { provider -> URL? in
-            var url: URL?
-            provider.loadObject(ofClass: URL.self) { loadedUrl, _ in
-                url = loadedUrl
+        let providers = info.itemProviders(for: [.fileURL])
+        guard !providers.isEmpty else { return false }
+
+        let group = DispatchGroup()
+        let collector = URLDropCollector()
+
+        for provider in providers {
+            group.enter()
+
+            if provider.canLoadObject(ofClass: URL.self) {
+                _ = provider.loadObject(ofClass: URL.self) { loadedURL, _ in
+                    defer { group.leave() }
+                    guard let loadedURL else { return }
+                    collector.append(loadedURL)
+                }
+            } else {
+                provider.loadDataRepresentation(forTypeIdentifier: UTType.fileURL.identifier) { data, _ in
+                    defer { group.leave() }
+                    guard
+                        let data,
+                        let text = String(data: data, encoding: .utf8),
+                        let loadedURL = URL(string: text)
+                    else { return }
+                    collector.append(loadedURL)
+                }
             }
-            return url
         }
-        
-        onDrop(urls)
-        return !urls.isEmpty
+
+        group.notify(queue: .main) {
+            onDragStateChange(false)
+            onDrop(collector.snapshot())
+        }
+
+        return true
     }
     
     func validateDrop(info: DropInfo) -> Bool {
         !info.itemProviders(for: [.fileURL]).isEmpty
     }
-}
 
+    func dropEntered(info: DropInfo) {
+        onDragStateChange(true)
+    }
+
+    func dropExited(info: DropInfo) {
+        onDragStateChange(false)
+    }
+}

@@ -1,5 +1,30 @@
 import AVFoundation
 import Foundation
+import UniformTypeIdentifiers
+
+enum VideoFileError: LocalizedError {
+    case notRegularFile(String)
+    case unsupportedType(String)
+    case missingVideoTrack(String)
+    case invalidDuration(String)
+
+    private var prefersEnglish: Bool {
+        Locale.preferredLanguages.first?.hasPrefix("en") == true
+    }
+
+    var errorDescription: String? {
+        switch self {
+        case .notRegularFile(let file):
+            return prefersEnglish ? "Not a regular file: \(file)" : "不是普通文件：\(file)"
+        case .unsupportedType(let file):
+            return prefersEnglish ? "Unsupported media type: \(file)" : "不支持的媒体类型：\(file)"
+        case .missingVideoTrack(let file):
+            return prefersEnglish ? "No video track found: \(file)" : "未找到视频轨道：\(file)"
+        case .invalidDuration(let file):
+            return prefersEnglish ? "Invalid media duration: \(file)" : "媒体时长无效：\(file)"
+        }
+    }
+}
 
 struct VideoFile: Identifiable, Hashable {
     let id = UUID()
@@ -49,36 +74,50 @@ struct VideoFile: Identifiable, Hashable {
         return String(format: "%.1f %@", size, sizes[index])
     }
 
-    static func make(from url: URL) async -> VideoFile {
-        let asset = AVURLAsset(url: url)
-        let durationSeconds: Double
-        var fileSize: Int64?
+    private static let fallbackVideoExtensions: Set<String> = [
+        "mov", "mp4", "m4v", "avi", "mkv", "webm", "mpeg", "mpg"
+    ]
 
-        // 获取文件修改时间和大小
-        do {
-            let resourceValues = try url.resourceValues(forKeys: [.contentModificationDateKey, .fileSizeKey])
-            let modifiedAt = resourceValues.contentModificationDate
-            
-            if let size = resourceValues.fileSize {
-                fileSize = Int64(size)
-            }
-            
-            let duration = try await asset.load(.duration)
-            durationSeconds = CMTimeGetSeconds(duration)
-            
-            return VideoFile(url: url, duration: durationSeconds, modifiedAt: modifiedAt, fileSize: fileSize)
-        } catch {
-            // 如果获取资源值失败，则回退到基本实现
-            let modifiedAt = try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
-            
-            do {
-                let duration = try await asset.load(.duration)
-                durationSeconds = CMTimeGetSeconds(duration)
-            } catch {
-                durationSeconds = 0
-            }
-            
-            return VideoFile(url: url, duration: durationSeconds, modifiedAt: modifiedAt, fileSize: fileSize)
+    private static func isSupportedVideoType(_ resourceValues: URLResourceValues, url: URL) -> Bool {
+        if let contentType = resourceValues.contentType {
+            return contentType.conforms(to: .movie) || contentType.conforms(to: .video)
         }
+        return fallbackVideoExtensions.contains(url.pathExtension.lowercased())
+    }
+
+    static func make(from url: URL) async throws -> VideoFile {
+        let resourceKeys: Set<URLResourceKey> = [
+            .isRegularFileKey,
+            .contentModificationDateKey,
+            .fileSizeKey,
+            .contentTypeKey
+        ]
+
+        let resourceValues = try url.resourceValues(forKeys: resourceKeys)
+        guard resourceValues.isRegularFile != false else {
+            throw VideoFileError.notRegularFile(url.lastPathComponent)
+        }
+        guard isSupportedVideoType(resourceValues, url: url) else {
+            throw VideoFileError.unsupportedType(url.lastPathComponent)
+        }
+
+        let asset = AVURLAsset(url: url)
+        let sourceVideoTracks = try await asset.loadTracks(withMediaType: .video)
+        guard !sourceVideoTracks.isEmpty else {
+            throw VideoFileError.missingVideoTrack(url.lastPathComponent)
+        }
+
+        let duration = try await asset.load(.duration)
+        let durationSeconds = CMTimeGetSeconds(duration)
+        guard durationSeconds.isFinite, durationSeconds > 0 else {
+            throw VideoFileError.invalidDuration(url.lastPathComponent)
+        }
+
+        return VideoFile(
+            url: url,
+            duration: durationSeconds,
+            modifiedAt: resourceValues.contentModificationDate,
+            fileSize: resourceValues.fileSize.map(Int64.init)
+        )
     }
 }
